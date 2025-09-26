@@ -286,7 +286,11 @@ Resources:
               - Effect: Allow
                 Action:
                 - 's3:putObject'
-                Resource: !Sub arn:${AWS::Partition}:s3:::${WebappDeploymentBucket}/*                  
+                Resource: !Sub arn:${AWS::Partition}:s3:::${WebappDeploymentBucket}/*
+              - Effect: Allow
+                Action:
+                - 'cloudformation:DescribeStacks'
+                Resource: !Sub 'arn:${AWS::Partition}:cloudformation:*:${AWS::AccountId}:stack/codedeploy-lab/*'                  
 
   WebappApplication:
     Type: AWS::CodeDeploy::Application
