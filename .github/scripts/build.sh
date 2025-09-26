@@ -1,7 +1,6 @@
 #!/bin/bash
 set -xe
 
-  # Maven is used to build  and create a war file.
-  mvn -Dmaven.test.skip=true clean install
-
-
+# Maven is used to build and create a war file
+cd spring-boot-hello-world-example
+mvn clean package -Dmaven.test.skip=true
