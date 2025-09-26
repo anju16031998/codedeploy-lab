@@ -297,7 +297,7 @@ Resources:
     Properties:
       ApplicationName: !Ref WebappApplication
       ServiceRoleArn: !GetAtt CodeDeployRole.Arn
-      DeploymentConfigName: CodeDeployDefault.OneAtATime
+      DeploymentConfigName: CodeDeployDefault.AllAtOnce
       DeploymentGroupName: CodeDeployGroupName
       AutoRollbackConfiguration:
           Enabled: true
@@ -504,10 +504,11 @@ Resources:
   ALBTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      HealthCheckIntervalSeconds: 10
-      UnhealthyThresholdCount: 2
+      HealthCheckIntervalSeconds: 30
+      HealthCheckTimeoutSeconds: 5
+      UnhealthyThresholdCount: 5
       HealthyThresholdCount: 2
-      HealthCheckPath: "/"
+      HealthCheckPath: "/SpringBootHelloWorldExampleApplication"
       Port: 8080
       Protocol: HTTP
       VpcId: !Ref VPC
