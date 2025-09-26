@@ -6,7 +6,6 @@ on:
 env:
   applicationfolder: spring-boot-hello-world-example
   AWS_REGION: us-east-1
-  S3BUCKET: labstack-webappdeploymentbucket-8kefukl7oav9 
 
 
 jobs:
@@ -39,9 +38,17 @@ jobs:
         working-directory: ${{ env.applicationfolder }}
         run: $GITHUB_WORKSPACE/.github/scripts/build.sh
 
+      - name: Get S3 bucket name from CloudFormation
+        id: get-bucket
+        run: |
+          S3BUCKET=$(aws cloudformation describe-stacks --stack-name codedeploy-lab --query 'Stacks[0].Outputs[?OutputKey==`DeploymentBucket`].OutputValue' --output text)
+          echo "S3BUCKET=$S3BUCKET" >> $GITHUB_ENV
+
       - name: Upload Artifact to s3
         working-directory: ${{ env.applicationfolder }}/target
-        run: aws s3 cp *.war s3://${{ env.S3BUCKET }}/
+        run: |
+          mv *.war SpringBootHelloWorldExampleApplication.war
+          aws s3 cp SpringBootHelloWorldExampleApplication.war s3://${{ env.S3BUCKET }}/
         
   deploy:
     needs: build
